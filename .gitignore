@@ -1,0 +1,58 @@
+# 🚫 Jangan commit — ini files yang gak boleh masuk git
+
+# Credentials & API Keys
+.env
+.env.*
+*.env
+**/*.env
+
+# Credential files
+*_key.txt
+*_key
+*_key.*
+*_cred*
+creds*
+cred*
+
+# Node
+node_modules/
+dist/
+build/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cloudflare specific
+.wrangler/state/
+.wrangler/credentials/
+**/wrangler.toml  # optional — tapi kalau ada credentials
+
+# Git
+.wrangler/
+.vscode/
+
+# Temp
+/tmp/
+*.tmp
+*~
+
+# Profil / data pribadi
+**/private/
+**/secrets/
+**/keys/
+
+# Note: jangan hapus .env.example — itu template buat publik
