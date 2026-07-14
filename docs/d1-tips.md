@@ -17,7 +17,7 @@
 ❌ **PRAGMA table_info** — error "not authorized: SQLITE_AUTH"
 ❌ **sqlite_master** — error "SQLITE_AUTH"
 ❌ **PRAGMA** lainnya kecuali di CLI (`wrangler d1 execute`)
-❌ **SQL functions** — `random()`, `uuid()` — ada yang gak support
+⚠️ **SQL functions** — `random()` DIDUKUNG di D1; `uuid()` TIDAK ada (pakai `randomblob()`/`hex()` atau generate di JS)
 
 ### Contoh Error
 

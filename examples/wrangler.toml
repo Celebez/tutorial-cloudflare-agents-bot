@@ -1,0 +1,23 @@
+name = "telegram-echo-bot"
+main = "worker.js"
+compatibility_date = "2026-06-01"
+
+# Binding contoh (uncomment & sesuaikan bila perlu)
+# [[kv_namespaces]]
+# binding = "CACHE"
+# id = "xxxx-xxxx-xxxx-xxxx"
+#
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "my-database"
+# database_id = "xxxx-xxxx-xxxx-xxxx"
+#
+# [[r2_buckets]]
+# binding = "BUCKET"
+# bucket_name = "my-bucket"
+
+# BOT_TOKEN sebaiknya diset sebagai SECRET (bukan vars) di production:
+#   wrangler secret put BOT_TOKEN
+# Di bawah hanya sebagai fallback lokal (jangan commit token asli).
+[vars]
+# BOT_TOKEN = "isi_token_atau_kosongkan"

@@ -10,7 +10,7 @@
 |---------|------------|------|-------------------|-----------|-------------|
 | **D1** | `env.DB` | SQLite | Database ID + Name | 5GB storage | ✅ Disk |
 | **KV** | `env.CACHE` | Key-Value | Namespace ID | 1GB | ✅ Global |
-| **R2** | `env.ASSETS` | Object | Bucket Name | 10GB | ✅ S3-like |
+| **R2** | `env.BUCKET` | Object | Bucket Name | 10GB | ✅ S3-like |
 | **Queues** | `env.QUEUE` | Message | Queue Name | 100k/mo | ✅ Buffer |
 | **DO** | `env.COUNTER` | Stateful | Class Name | Included | ✅ RAM+DB |
 | **Secrets** | `env.SECRET` | Env Var | Key Name | Unlimited | ✅ Config |
@@ -96,7 +96,7 @@ await env.DB.prepare("DELETE FROM users WHERE id = ?").bind(1).run();
 ### Kekurangan
 - **Write latency** — ~5-60 detik buat propagate ke semua edge
 - **1MB limit** per value
-- **25 reads/sec** per free tier
+- **Eventual consistency** — read bisa return nilai lama pasca-write (propagasi ~5-60 detik)
 
 ### Contoh
 
@@ -155,17 +155,17 @@ async function getData(key) {
 
 ```javascript
 // Get object
-const obj = await env.ASSETS.get("path/to/file.pdf");
+const obj = await env.BUCKET.get("path/to/file.pdf");
 if (obj === null) return new Response("Not found", { status: 404 });
 
 // Set object
-await env.ASSETS.put("path/to/file.pdf", fileBody);
+await env.BUCKET.put("path/to/file.pdf", fileBody);
 
 // Delete
-await env.ASSETS.delete("old/file.pdf");
+await env.BUCKET.delete("old/file.pdf");
 
 // List
-const objects = await env.ASSETS.list();
+const objects = await env.BUCKET.list();
 ```
 
 ### R2 vs S3
@@ -244,7 +244,7 @@ export class Counter {
 
   async fetch(request) {
     const url = new URL(request.url);
-    let count = this.state.storage.get("count") || 0;
+    let count = (await this.state.storage.get("count")) || 0;
 
     if (url.pathname === "/increment") {
       count++;
@@ -283,7 +283,8 @@ curl -X PUT "https://api.cloudflare.com/client/v4/accounts/$ACCT/workers/scripts
   -H "X-Auth-Email: $EMAIL" \
   -H "X-Auth-Key: $CF_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"name": "API_KEY", "text": "supersecret123", "type": "secret_text"}'
+  -d "{\"name\": \"API_KEY\", \"text\": \"$(printf '%s' 'supersecret123' | base64)\", \"type\": \"secret_text\"}"
+# Catatan: field "text" wajib base64. Tipe "secret_text" = plain text yang dienkripsi CF (tidak bisa dibaca balik).
 ```
 
 ### Best Practices

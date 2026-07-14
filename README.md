@@ -193,12 +193,12 @@ await env.CACHE.delete("key"); // delete
 
 ```toml
 [[r2_buckets]]
-binding = "ASSETS"
+binding = "BUCKET"   # jangan "ASSETS" — itu reserved untuk Pages static assets
 bucket_name = "my-bucket"
 ```
 
 ```javascript
-const object = await env.ASSETS.get("file.pdf");
+const object = await env.BUCKET.get("file.pdf");  // "ASSETS" reserved untuk Pages assets — pakai nama binding lain (mis. BUCKET)
 ```
 
 **Kegunaan:** nyimpen file (gambar, video, dokumen), backup, log archives.
@@ -404,8 +404,8 @@ hermes chat -q "Buatkan function untuk generate angka random"
 - Git operations
 
 ```bash
-# Install
-pip install codex-cli    # atau download binary
+# Install — OpenAI Codex CLI lewat npm (BUKAN pip; "codex-cli" di PyPI itu wrapper Gemini, tool beda)
+npm install -g @openai/codex
 
 # Setup API key
 export OPENAI_API_KEY="sk-..."
@@ -422,8 +422,8 @@ codex -p "Buatkan REST API endpoint untuk user CRUD"
 - Multi-file changes
 
 ```bash
-# Install
-curl -fsSL https://raw.githubusercontent.com/castai/kimchi/main/install.sh | bash
+# Repo resmi: https://github.com/castai/opencode-kimchi (project Node.js, TIDAK ada install.sh)
+# Ikuti panduan di README repo-nya untuk install (jangan curl|bash dari URL tak terverifikasi)
 
 # Setup
 export KIMCHI_API_KEY="castai_v1_..."
@@ -485,6 +485,8 @@ export default {
 curl -X POST "https://api.telegram.org/botTOKEN/setWebhook" \
   -d "url=https://my-worker.workers.dev/"
 ```
+
+> 📦 **Kode runnable ada di `examples/`** — `worker.js` (echo bot) + `wrangler.toml` yang beneran bisa `wrangler deploy`. Lihat `examples/README.md`.
 
 ### 7c. Pattern Lain
 
@@ -573,7 +575,7 @@ Content-Type: application/javascript+module
 **Deploy udah selesai tapi belum muncul.** Fix:
 - Tunggu ~1-5 menit
 - Cek via curl dengan `-sSL` (ikuti redirect)
-- `HTTP 308` = sukses (Cloudflare lagi redirect)
+- `HTTP 308` = permanent redirect (BUKAN indikator sukses). Deploy sukses = `200 OK`. 308 wajar saat CF redirect, tapi jangan dianggap "berhasil deploy"
 
 ### CORS
 
@@ -625,7 +627,10 @@ tutorial-cloudflare-agents-bot/
 │   ├── manual-deploy.md   ← Deploy via REST API manual
 │   ├── d1-tips.md        ← D1 database tips & pitfalls
 │   └── bindings-guide.md ← Panduan lengkap bindings
-├── screenshots/            ← Gambar (optional)
+├── examples/               ← Kode runnable (beneran bisa deploy)
+│   ├── worker.js         ← Telegram echo bot (ESM)
+│   ├── wrangler.toml     ← Config + contoh binding
+│   └── README.md         ← Cara jalanin
 └── .gitignore              ← File git
 ```
 
