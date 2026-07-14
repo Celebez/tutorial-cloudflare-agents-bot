@@ -4,10 +4,19 @@
 
 ![Banner](docs/banner.png)
 
+![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)
+![Platform: Cloudflare](https://img.shields.io/badge/platform-Cloudflare%20Workers%20%2F%20Pages-orange.svg)
+![Lang: Indonesia](https://img.shields.io/badge/bahasa-Indonesia-blue.svg)
+![Docs](https://img.shields.io/badge/docs-DNS%20%7C%20Bindings%20%7C%20Telegram-21e99a.svg)
+
 > 🌐 **Bahasa:** Indonesia (mixed English tech terms)
 > 🎯 **Target:** Developer/pemula yang mau belajar Cloudflare ecosystem + AI Agent + Telegram Bot
-> 📅 **Last updated:** 2026-06-29
+> 📅 **Last updated:** 2026-07-14
 > 👤 **Author:** [Celebez](https://github.com/Celebez)
+
+### 🎬 Demo — Deploy Worker (animasi)
+
+![Demo deploy](docs/demo-deploy.gif)
 
 ---
 
@@ -662,6 +671,8 @@ tutorial-cloudflare-agents-bot/
 │   ├── worker.js         ← Telegram echo bot (ESM)
 │   ├── wrangler.toml     ← Config + contoh binding
 │   └── README.md         ← Cara jalanin
+├── docs/demo-deploy.gif   ← Demo animasi deploy
+├── LICENSE                ← MIT License
 └── .gitignore              ← File git
 ```
 
