@@ -23,6 +23,7 @@
 8. [Tips & Best Practices](#-8-tips--best-practices)
 9. [Troubleshooting Umum](#-9-troubleshooting-umum)
 10. [Referensi & Link](#-10-referensi--link)
+11. [Panduan DNS & Custom Domain](#-11-panduan-dns--custom-domain)
 
 ---
 
@@ -65,6 +66,7 @@ User Browser → Cloudflare Edge (100+ lokasi) → Worker Code → D1/KV/R2/API
 8. [Tips & Best Practices](#-8-tips--best-practices)
 9. [Troubleshooting Umum](#-9-troubleshooting-umum)
 10. [Referensi & Link](#-10-referensi--link)
+11. [Panduan DNS & Custom Domain](#-11-panduan-dns--custom-domain)
 
 ---
 
@@ -588,7 +590,31 @@ new Response(body, {
 
 ---
 
-## 📚 10. Referensi & Link
+## 🌐 11. Panduan DNS & Custom Domain
+
+Cloudflare bukan cuma Workers — dia juga **DNS manager & CDN** gratis. Panduan lengkap (record A/CNAME/MX/TXT, masukin domain, proxy 🟠, SSL, custom domain Pages/Workers, email, troubleshooting) ada di **`docs/dns-domain-guide.md`**.
+
+Ringkasan cepat:
+
+### Masukin domain ke Cloudflare
+1. Dash → **Add a site** → ketik domain → plan Free.
+2. Ganti **nameserver di registrar** ke punya CF (`nsa.cloudflare.com`, `nsb.cloudflare.com`).
+3. Tunggu Active 🟢 (cek: `dig NS example.com +short`).
+
+### Proxy 🟠 vs ⚪
+- 🟠 **Proxied** — trafik lewat edge CF, IP disembunyikan, dapat DDoS protection. Untuk web/API (port 80/443).
+- ⚪ **DNS only** — trafik langsung ke origin. Untuk MX/email, game server, SSH.
+
+### SSL/TLS → **Full (Strict)**
+Gratis, otomatis untuk Pages/Workers (sertifikat Google Trust Services ~2 menit).
+
+### Custom domain
+- **Pages:** Custom domains → ketik `example.com` → CF buat CNAME + SSL otomatis. Apex pakai CNAME flattening.
+- **Workers:** Settings → Custom Domains (baru) atau Routes (legacy, bisa path-based).
+
+> 📦 Detail + contoh curl API ada di `docs/dns-domain-guide.md`.
+
+---
 
 ### Official Docs
 - [Cloudflare Workers Docs](https://developers.cloudflare.com/workers/)
@@ -614,7 +640,11 @@ new Response(body, {
 ### Tools
 - [curl](https://curl.se/) — HTTP requests
 - [jq](https://jqlang.github.io/jq/) — JSON parser di CLI
-- [Wrangler TOML reference](https://developers.cloudflare.com/workers/wrangler/configuration/)
+- [Custom Domains for Pages](https://developers.cloudflare.com/pages/configuration/custom-domains/)
+- [Workers Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)
+- [Cloudflare DNS](https://developers.cloudflare.com/dns/)
+- [SSL/TLS](https://developers.cloudflare.com/ssl/)
+- [Email Routing](https://developers.cloudflare.com/email-routing/)
 
 ---
 
@@ -626,7 +656,8 @@ tutorial-cloudflare-agents-bot/
 ├── docs/                   ← Dokumen tambahan
 │   ├── manual-deploy.md   ← Deploy via REST API manual
 │   ├── d1-tips.md        ← D1 database tips & pitfalls
-│   └── bindings-guide.md ← Panduan lengkap bindings
+│   ├── bindings-guide.md ← Panduan lengkap bindings
+│   └── dns-domain-guide.md ← DNS, nameserver, SSL, custom domain
 ├── examples/               ← Kode runnable (beneran bisa deploy)
 │   ├── worker.js         ← Telegram echo bot (ESM)
 │   ├── wrangler.toml     ← Config + contoh binding
